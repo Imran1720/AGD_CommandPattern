@@ -9,7 +9,7 @@ namespace Command.Commands
 
         public AttackCommand(CommandData commandData)
         {
-            this.CommandData = commandData;
+            this.commandData = commandData;
             willHitTarget = WillHitTarget();
         }
 

@@ -7,7 +7,7 @@ namespace Command.Commands
         private bool willHitTarget;
         public CleanseCommand(CommandData commandData)
         {
-            this.CommandData = commandData;
+            this.commandData = commandData;
             willHitTarget = WillHitTarget();
         }
         public override void Execute() => GameService.Instance.ActionService.GetActionByType(CommandType.Cleanse).PerformAction(actorUnit, targetUnit, willHitTarget);

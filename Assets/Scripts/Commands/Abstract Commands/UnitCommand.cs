@@ -5,7 +5,7 @@ namespace Command.Commands
 
     public abstract class UnitCommand : ICommand
     {
-        public CommandData CommandData;
+        public CommandData commandData;
 
         protected UnitController actorUnit;
         protected UnitController targetUnit;

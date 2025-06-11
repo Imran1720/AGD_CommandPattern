@@ -6,7 +6,7 @@ namespace Command.Commands
         private bool willHitTarget;
         public BerserkActionCommand(CommandData commandData)
         {
-            this.CommandData = commandData;
+            this.commandData = commandData;
             willHitTarget = WillHitTarget();
         }
 

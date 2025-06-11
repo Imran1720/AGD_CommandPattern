@@ -7,7 +7,7 @@ namespace Command.Commands
         private bool willHitTarget;
         public MeditateCommand(CommandData commandData)
         {
-            this.CommandData = commandData;
+            this.commandData = commandData;
             willHitTarget = WillHitTarget();
         }
 

@@ -9,7 +9,7 @@ namespace Command.Commands
 
         public ThirdEyeCommand(CommandData commandData)
         {
-            this.CommandData = commandData;
+            this.commandData = commandData;
             willHitTarget = WillHitTarget();
         }
         public override void Execute() => GameService.Instance.ActionService.GetActionByType(CommandType.ThirdEye).PerformAction(actorUnit, targetUnit, willHitTarget);
