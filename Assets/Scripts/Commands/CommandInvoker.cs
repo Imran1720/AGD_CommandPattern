@@ -1,16 +1,21 @@
 using System.Collections.Generic;
 
-public class CommandInvoker
+namespace Command.Commands
 {
-    private Stack<ICommand> commandRegister = new Stack<ICommand>();
 
-    public void ProcessCommand(ICommand commandToProcess)
+    public class CommandInvoker
     {
-        ExecuteCommand(commandToProcess);
-        RegiterCommand(commandToProcess);
+        private Stack<ICommand> commandRegister = new Stack<ICommand>();
+
+        public void ProcessCommand(ICommand commandToProcess)
+        {
+            ExecuteCommand(commandToProcess);
+            RegiterCommand(commandToProcess);
+        }
+
+        public void ExecuteCommand(ICommand commandToExecute) => commandToExecute.Execute();
+
+        public void RegiterCommand(ICommand commandToRegiter) => commandRegister.Push(commandToRegiter);
     }
 
-    public void ExecuteCommand(ICommand commandToExecute) => commandToExecute.Execute();
-
-    public void RegiterCommand(ICommand commandToRegiter) => commandRegister.Push(commandToRegiter);
 }

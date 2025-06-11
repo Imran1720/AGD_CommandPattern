@@ -1,19 +1,21 @@
 using Command.Player;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
-public abstract class UnitCommand : ICommand
+namespace Command.Commands
 {
-    public int ActorUnitID;
-    public int TargetUnitID;
-    public int ActorPlayerID;
-    public int TargetPlayerID;
 
-    protected UnitController actorUnit;
-    protected UnitController targetUnit;
+    public abstract class UnitCommand : ICommand
+    {
+        public int ActorUnitID;
+        public int TargetUnitID;
+        public int ActorPlayerID;
+        public int TargetPlayerID;
 
-    public abstract void Execute();
+        protected UnitController actorUnit;
+        protected UnitController targetUnit;
 
-    public abstract bool WillHitTarget();
+        public abstract void Execute();
+
+        public abstract bool WillHitTarget();
+    }
+
 }

@@ -1,4 +1,8 @@
-public interface ICommand
+namespace Command.Commands
 {
-    void Execute();
+    public interface ICommand
+    {
+        void Execute();
+    }
+
 }
