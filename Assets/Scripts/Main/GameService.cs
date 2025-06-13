@@ -1,13 +1,14 @@
-using UnityEngine;
-using Command.Utilities;
-using Command.Sound;
-using System.Collections.Generic;
+using Command.Actions;
+using Command.Battle;
+using Command.Commands;
+using Command.Events;
 using Command.Input;
 using Command.Player;
+using Command.Sound;
 using Command.UI;
-using Command.Events;
-using Command.Battle;
-using Command.Actions;
+using Command.Utilities;
+using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace Command.Main
@@ -28,6 +29,7 @@ namespace Command.Main
         public InputService InputService { get; private set; }
         public BattleService BattleService { get; private set; }
         public PlayerService PlayerService { get; private set; }
+        public CommandInvoker CommandInvoker { get; private set; }
 
         [SerializeField] private UIService uiService;
         public UIService UIService => uiService;
@@ -45,12 +47,14 @@ namespace Command.Main
             SoundService = new SoundService(soundScriptableObject, sfxSource, bgMusicSource);
             EventService = new EventService();
             ActionService = new ActionService();
-            InputService = new InputService();
             BattleService = new BattleService(battleScriptableObjects);
             PlayerService = new PlayerService();
             uiService.Init(battleScriptableObjects.Count);
+            InputService = new InputService(uiService.GetActionSelectionUIController());
+            CommandInvoker = new CommandInvoker();
         }
 
+        public void PerformAction(ICommand commandToExceute) => PlayerService.ProcessUnitCommand(commandToExceute as UnitCommand);
         private void Update() => InputService.UpdateInputService();
     }
 }

@@ -1,6 +1,9 @@
+using Command.Actions;
+using Command.Commands;
 using Command.Main;
 using Command.Player;
-using Command.Actions;
+using Command.UI;
+using System;
 
 namespace Command.Input
 {
@@ -9,14 +12,16 @@ namespace Command.Input
         private MouseInputHandler mouseInputHandler;
 
         private InputState currentState;
-        private ActionType selectedActionType;
+        private CommandType selectedCommandType;
         private TargetType targetType;
 
-        public InputService()
+        private ActionSelectionUIController actionSelectionUIController;
+        public InputService(ActionSelectionUIController actionSelectionUIController)
         {
             mouseInputHandler = new MouseInputHandler(this);
             SetInputState(InputState.INACTIVE);
             SubscribeToEvents();
+            this.actionSelectionUIController = actionSelectionUIController;
         }
 
         public void SetInputState(InputState inputStateToSet) => currentState = inputStateToSet;
@@ -25,13 +30,13 @@ namespace Command.Input
 
         public void UpdateInputService()
         {
-            if(currentState == InputState.SELECTING_TARGET)
+            if (currentState == InputState.SELECTING_TARGET)
                 mouseInputHandler.HandleTargetSelection(targetType);
         }
 
-        public void OnActionSelected(ActionType selectedActionType)
+        public void OnActionSelected(CommandType selectedActionType)
         {
-            this.selectedActionType = selectedActionType;
+            this.selectedCommandType = selectedActionType;
             SetInputState(InputState.SELECTING_TARGET);
             TargetType targetType = SetTargetType(selectedActionType);
             ShowTargetSelectionUI(targetType);
@@ -43,12 +48,51 @@ namespace Command.Input
             GameService.Instance.UIService.ShowTargetOverlay(playerID, selectedTargetType);
         }
 
-        private TargetType SetTargetType(ActionType selectedActionType) => targetType = GameService.Instance.ActionService.GetTargetTypeForAction(selectedActionType);
+        private TargetType SetTargetType(CommandType selectedActionType) => targetType = GameService.Instance.ActionService.GetTargetTypeForAction(selectedActionType);
 
         public void OnTargetSelected(UnitController targetUnit)
         {
             SetInputState(InputState.EXECUTING_INPUT);
-            GameService.Instance.PlayerService.PerformAction(selectedActionType, targetUnit);
+
+            UnitCommand commandToExecute = CreateUnitCommand(targetUnit);
+
+            GameService.Instance.PlayerService.ProcessUnitCommand(commandToExecute);
+        }
+
+        private UnitCommand CreateUnitCommand(UnitController targetUnit)
+        {
+            CommandData commandData = CreateCommandData(targetUnit);
+
+            switch (selectedCommandType)
+            {
+                case CommandType.Attack:
+                    return new AttackCommand(commandData, actionSelectionUIController);
+                case CommandType.Heal:
+                    return new HealCommand(commandData, actionSelectionUIController);
+                case CommandType.AttackStance:
+                    return new AttackStanceCommand(commandData, actionSelectionUIController);
+                case CommandType.Cleanse:
+                    return new CleanseCommand(commandData, actionSelectionUIController);
+                case CommandType.BerserkAttack:
+                    return new BerserkActionCommand(commandData, actionSelectionUIController);
+                case CommandType.Meditate:
+                    return new MeditateCommand(commandData, actionSelectionUIController);
+                case CommandType.ThirdEye:
+                    return new ThirdEyeCommand(commandData, actionSelectionUIController);
+                default:
+                    // If the selectedCommandType is not recognized, throw an exception.
+                    throw new System.Exception($"No Command found of type: {selectedCommandType}");
+
+
+            }
+        }
+
+        private CommandData CreateCommandData(UnitController targetUnit)
+        {
+            return new CommandData(GameService.Instance.PlayerService.ActiveUnitID,
+                targetUnit.UnitID,
+                GameService.Instance.PlayerService.ActivePlayerID,
+                targetUnit.Owner.PlayerID);
         }
     }
 }

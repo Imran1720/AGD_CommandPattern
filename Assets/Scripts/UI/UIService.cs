@@ -1,8 +1,8 @@
+using Command.Actions;
+using Command.Input;
+using Command.Main;
 using System.Collections.Generic;
 using UnityEngine;
-using Command.Main;
-using Command.Input;
-using Command.Actions;
 
 namespace Command.UI
 {
@@ -34,6 +34,8 @@ namespace Command.UI
             battleEndController = new BattleEndUIController(battleEndView);
         }
 
+        public ActionSelectionUIController GetActionSelectionUIController() => actionSelectionController;
+
         public void Init(int battleCount) => ShowBattleSelectionView(battleCount);
 
         private void ShowBattleSelectionView(int battleCount) => battleSelectionController.Show(battleCount);
@@ -48,7 +50,7 @@ namespace Command.UI
 
         public void SetActionContainerAlignment(int activePlayerID) => actionSelectionController.SetActionContainerAlignment(activePlayerID);
 
-        public void ShowActionSelectionView(List<ActionType> executableActions)
+        public void ShowActionSelectionView(List<CommandType> executableActions)
         {
             actionSelectionController.Show(executableActions);
             GameService.Instance.InputService.SetInputState(InputState.SELECTING_ACTION);
