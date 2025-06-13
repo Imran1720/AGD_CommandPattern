@@ -15,6 +15,15 @@ namespace Command.Commands
         }
         public override void Execute() => GameService.Instance.ActionService.GetActionByType(CommandType.AttackStance).PerformAction(actorUnit, targetUnit, willHitTarget);
 
+        public override void undo()
+        {
+            if (willHitTarget)
+            {
+                targetUnit.CurrentPower -= (int)(targetUnit.CurrentPower * .2f);
+                actorUnit.Owner.ResetCurrentActiveUnit();
+            }
+        }
+
         public override bool WillHitTarget() => true;
     }
 
