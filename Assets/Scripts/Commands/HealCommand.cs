@@ -1,4 +1,5 @@
 using Command.Main;
+using Command.UI;
 
 namespace Command.Commands
 {
@@ -6,10 +7,12 @@ namespace Command.Commands
     public class HealCommand : UnitCommand
     {
         private bool willHitTarget;
-        public HealCommand(CommandData commandData)
+        ActionSelectionUIController actionSelectionUIController;
+        public HealCommand(CommandData commandData, ActionSelectionUIController actionSelectionUIController)
         {
             this.commandData = commandData;
             willHitTarget = WillHitTarget();
+            this.actionSelectionUIController = actionSelectionUIController;
         }
 
         public override void Execute() => GameService.Instance.ActionService.GetActionByType(Actions.CommandType.Heal).PerformAction(actorUnit, targetUnit, willHitTarget);
@@ -20,6 +23,7 @@ namespace Command.Commands
             {
                 targetUnit.TakeDamage(actorUnit.CurrentPower);
                 actorUnit.Owner.ResetCurrentActiveUnit();
+                actionSelectionUIController.Show(actorUnit.GetCommandsList());
             }
         }
 

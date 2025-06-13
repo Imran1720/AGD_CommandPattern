@@ -3,6 +3,7 @@ using Command.Commands;
 using Command.Main;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -169,6 +170,10 @@ namespace Command.Player
                 return unitView.transform.position + unitScriptableObject.EnemyBattlePositionOffset;
             else
                 return unitView.transform.position - unitScriptableObject.EnemyBattlePositionOffset;
+        }
+        public List<CommandType> GetCommandsList()
+        {
+            return unitScriptableObject.executableCommands;
         }
     }
 

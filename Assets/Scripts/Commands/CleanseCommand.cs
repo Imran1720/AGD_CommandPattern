@@ -1,15 +1,18 @@
 using Command.Actions;
 using Command.Main;
+using Command.UI;
 namespace Command.Commands
 {
     public class CleanseCommand : UnitCommand
     {
         private bool willHitTarget;
         private int previousPower;
-        public CleanseCommand(CommandData commandData)
+        ActionSelectionUIController actionSelectionUIController;
+        public CleanseCommand(CommandData commandData, ActionSelectionUIController actionSelectionUIController)
         {
             this.commandData = commandData;
             willHitTarget = WillHitTarget();
+            this.actionSelectionUIController = actionSelectionUIController;
         }
         public override void Execute()
         {
@@ -23,6 +26,7 @@ namespace Command.Commands
                 targetUnit.CurrentPower = previousPower;
 
             actorUnit.Owner.ResetCurrentActiveUnit();
+            actionSelectionUIController.Show(actorUnit.GetCommandsList());
         }
 
         public override bool WillHitTarget() => true;

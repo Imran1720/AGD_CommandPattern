@@ -47,10 +47,10 @@ namespace Command.Main
             SoundService = new SoundService(soundScriptableObject, sfxSource, bgMusicSource);
             EventService = new EventService();
             ActionService = new ActionService();
-            InputService = new InputService();
             BattleService = new BattleService(battleScriptableObjects);
             PlayerService = new PlayerService();
             uiService.Init(battleScriptableObjects.Count);
+            InputService = new InputService(uiService.GetActionSelectionUIController());
             CommandInvoker = new CommandInvoker();
         }
 

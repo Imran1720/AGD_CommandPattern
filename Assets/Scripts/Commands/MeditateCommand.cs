@@ -1,4 +1,5 @@
 using Command.Main;
+using Command.UI;
 namespace Command.Commands
 {
 
@@ -6,10 +7,12 @@ namespace Command.Commands
     {
         private bool willHitTarget;
         private int previousMaxHealth;
-        public MeditateCommand(CommandData commandData)
+        ActionSelectionUIController actionSelectionUIController;
+        public MeditateCommand(CommandData commandData, ActionSelectionUIController actionSelectionUIController)
         {
             this.commandData = commandData;
             willHitTarget = WillHitTarget();
+            this.actionSelectionUIController = actionSelectionUIController;
         }
 
         public override void Execute()
@@ -26,6 +29,7 @@ namespace Command.Commands
                 targetUnit.TakeDamage(healthToReduce);
             }
             actorUnit.Owner.ResetCurrentActiveUnit();
+            actionSelectionUIController.Show(actorUnit.GetCommandsList());
         }
 
         public override bool WillHitTarget() => true;

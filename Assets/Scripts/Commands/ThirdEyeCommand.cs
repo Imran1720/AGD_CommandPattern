@@ -1,5 +1,6 @@
 using Command.Actions;
 using Command.Main;
+using Command.UI;
 
 namespace Command.Commands
 {
@@ -7,10 +8,12 @@ namespace Command.Commands
     {
         private bool willHitTarget;
         private int previousHealth;
-        public ThirdEyeCommand(CommandData commandData)
+        ActionSelectionUIController actionSelectionUIController;
+        public ThirdEyeCommand(CommandData commandData, ActionSelectionUIController actionSelectionUIController)
         {
             this.commandData = commandData;
             willHitTarget = WillHitTarget();
+            this.actionSelectionUIController = actionSelectionUIController;
         }
         public override void Execute()
         {
@@ -27,6 +30,8 @@ namespace Command.Commands
             targetUnit.RestoreHealth(healthToRestore);
             targetUnit.CurrentPower -= healthToRestore;
             actorUnit.Owner.ResetCurrentActiveUnit();
+            actionSelectionUIController.Show(actorUnit.GetCommandsList());
+
         }
 
         public override bool WillHitTarget() => true;

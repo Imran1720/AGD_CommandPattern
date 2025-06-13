@@ -1,8 +1,8 @@
+using Command.Actions;
+using Command.Input;
+using Command.Main;
 using System.Collections.Generic;
 using UnityEngine;
-using Command.Main;
-using Command.Input;
-using Command.Actions;
 
 namespace Command.UI
 {
@@ -33,6 +33,8 @@ namespace Command.UI
             actionSelectionController = new ActionSelectionUIController(actionSelectionView, actionButtonPrefab);
             battleEndController = new BattleEndUIController(battleEndView);
         }
+
+        public ActionSelectionUIController GetActionSelectionUIController() => actionSelectionController;
 
         public void Init(int battleCount) => ShowBattleSelectionView(battleCount);
 

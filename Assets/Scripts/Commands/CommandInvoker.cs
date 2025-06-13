@@ -1,4 +1,5 @@
 using Command.Main;
+using Command.UI;
 using System.Collections.Generic;
 
 namespace Command.Commands
@@ -21,7 +22,10 @@ namespace Command.Commands
         public void Undo()
         {
             if (!RegistryEmpty() && CommandBelongsToActivePlayer())
-                commandRegister.Pop().undo();
+            {
+                ICommand command = commandRegister.Pop();
+                command.undo();
+            }
         }
 
         private bool RegistryEmpty() => commandRegister.Count == 0;

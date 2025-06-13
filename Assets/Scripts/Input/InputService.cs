@@ -2,6 +2,7 @@ using Command.Actions;
 using Command.Commands;
 using Command.Main;
 using Command.Player;
+using Command.UI;
 using System;
 
 namespace Command.Input
@@ -14,11 +15,13 @@ namespace Command.Input
         private CommandType selectedCommandType;
         private TargetType targetType;
 
-        public InputService()
+        private ActionSelectionUIController actionSelectionUIController;
+        public InputService(ActionSelectionUIController actionSelectionUIController)
         {
             mouseInputHandler = new MouseInputHandler(this);
             SetInputState(InputState.INACTIVE);
             SubscribeToEvents();
+            this.actionSelectionUIController = actionSelectionUIController;
         }
 
         public void SetInputState(InputState inputStateToSet) => currentState = inputStateToSet;
@@ -63,19 +66,19 @@ namespace Command.Input
             switch (selectedCommandType)
             {
                 case CommandType.Attack:
-                    return new AttackCommand(commandData);
+                    return new AttackCommand(commandData, actionSelectionUIController);
                 case CommandType.Heal:
-                    return new HealCommand(commandData);
+                    return new HealCommand(commandData, actionSelectionUIController);
                 case CommandType.AttackStance:
-                    return new AttackStanceCommand(commandData);
+                    return new AttackStanceCommand(commandData, actionSelectionUIController);
                 case CommandType.Cleanse:
-                    return new CleanseCommand(commandData);
+                    return new CleanseCommand(commandData, actionSelectionUIController);
                 case CommandType.BerserkAttack:
-                    return new BerserkActionCommand(commandData);
+                    return new BerserkActionCommand(commandData, actionSelectionUIController);
                 case CommandType.Meditate:
-                    return new MeditateCommand(commandData);
+                    return new MeditateCommand(commandData, actionSelectionUIController);
                 case CommandType.ThirdEye:
-                    return new ThirdEyeCommand(commandData);
+                    return new ThirdEyeCommand(commandData, actionSelectionUIController);
                 default:
                     // If the selectedCommandType is not recognized, throw an exception.
                     throw new System.Exception($"No Command found of type: {selectedCommandType}");
