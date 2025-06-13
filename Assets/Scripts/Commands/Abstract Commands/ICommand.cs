@@ -4,7 +4,7 @@ namespace Command.Commands
     {
         void Execute();
 
-        void undo();
+        void Undo();
     }
 
 }

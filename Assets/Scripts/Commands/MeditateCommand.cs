@@ -1,26 +1,25 @@
 using Command.Main;
-using Command.UI;
+
 namespace Command.Commands
 {
-
     public class MeditateCommand : UnitCommand
     {
         private bool willHitTarget;
         private int previousMaxHealth;
-        ActionSelectionUIController actionSelectionUIController;
-        public MeditateCommand(CommandData commandData, ActionSelectionUIController actionSelectionUIController)
+
+        public MeditateCommand(CommandData commandData)
         {
             this.commandData = commandData;
             willHitTarget = WillHitTarget();
-            this.actionSelectionUIController = actionSelectionUIController;
         }
 
         public override void Execute()
         {
             previousMaxHealth = targetUnit.CurrentMaxHealth;
-            GameService.Instance.ActionService.GetActionByType(Actions.CommandType.Heal).PerformAction(actorUnit, targetUnit, willHitTarget);
+            GameService.Instance.ActionService.GetActionByType(Actions.CommandType.Meditate).PerformAction(actorUnit, targetUnit, willHitTarget);
         }
-        public override void undo()
+
+        public override void Undo()
         {
             if (willHitTarget)
             {
@@ -29,10 +28,8 @@ namespace Command.Commands
                 targetUnit.TakeDamage(healthToReduce);
             }
             actorUnit.Owner.ResetCurrentActiveUnit();
-            actionSelectionUIController.Show(actorUnit.GetCommandsList());
         }
 
         public override bool WillHitTarget() => true;
     }
-
 }

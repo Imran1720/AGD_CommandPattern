@@ -1,42 +1,40 @@
 using Command.Main;
-using Command.UI;
+using UnityEngine;
+
 namespace Command.Commands
 {
-    public class BerserkActionCommand : UnitCommand
+    public class BerserkAttackCommand : UnitCommand
     {
         private bool willHitTarget;
-        ActionSelectionUIController actionSelectionUIController;
-        public BerserkActionCommand(CommandData commandData, ActionSelectionUIController actionSelectionUIController)
+        private const float hitChance = 0.66f;
+
+        public BerserkAttackCommand(CommandData commandData)
         {
             this.commandData = commandData;
             willHitTarget = WillHitTarget();
-            this.actionSelectionUIController = actionSelectionUIController;
         }
 
         public override void Execute() => GameService.Instance.ActionService.GetActionByType(Actions.CommandType.BerserkAttack).PerformAction(actorUnit, targetUnit, willHitTarget);
 
-        public override void undo()
+        public override void Undo()
         {
             if (willHitTarget)
             {
                 if (!targetUnit.IsAlive())
-                {
                     targetUnit.Revive();
-                }
+
                 targetUnit.RestoreHealth(actorUnit.CurrentPower * 2);
             }
             else
             {
                 if (!actorUnit.IsAlive())
-                {
                     actorUnit.Revive();
-                }
+
                 actorUnit.RestoreHealth(actorUnit.CurrentPower * 2);
             }
             actorUnit.Owner.ResetCurrentActiveUnit();
-            actionSelectionUIController.Show(actorUnit.GetCommandsList());
         }
 
-        public override bool WillHitTarget() => true;
+        public override bool WillHitTarget() => Random.Range(0f, 1f) < hitChance;
     }
 }

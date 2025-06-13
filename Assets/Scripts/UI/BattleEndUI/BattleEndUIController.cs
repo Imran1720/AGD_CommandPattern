@@ -20,9 +20,10 @@ namespace Command.UI
         public void SetWinner(int winnerId) => battleEndView.SetResultText($"Player {winnerId} Won!");
 
         public void OnHomeButtonClicked() => SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+
         public void OnReplayButtonClicked()
         {
-            GameService.Instance.ReplayService.SetReplayState(ReplayState.ACTIVE);
+            GameService.Instance.ReplayService.SetReplayState(Replay.ReplayState.ACTIVE);
             GameService.Instance.InputService.SetInputState(Input.InputState.INACTIVE);
             GameService.Instance.EventService.OnReplayButtonSelected.InvokeEvent();
         }

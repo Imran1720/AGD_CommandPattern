@@ -18,7 +18,7 @@ namespace Command.Commands
 
         public void SetTargetUnit(UnitController targetUnit) => this.targetUnit = targetUnit;
 
-        public abstract void undo();
+        public abstract void Undo();
 
     }
 

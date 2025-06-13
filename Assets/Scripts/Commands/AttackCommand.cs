@@ -7,32 +7,26 @@ namespace Command.Commands
     public class AttackCommand : UnitCommand
     {
         private bool willHitTarget;
-        ActionSelectionUIController actionSelectionUIController;
 
-        public AttackCommand(CommandData commandData, ActionSelectionUIController actionSelectionUIController)
+        public AttackCommand(CommandData commandData)
         {
             this.commandData = commandData;
             willHitTarget = WillHitTarget();
-            this.actionSelectionUIController = actionSelectionUIController;
         }
-
-        public override void Execute() => GameService.Instance.ActionService.GetActionByType(CommandType.Attack).PerformAction(actorUnit, targetUnit, willHitTarget);
 
         public override bool WillHitTarget() => true;
 
-        public override void undo()
+        public override void Execute() => GameService.Instance.ActionService.GetActionByType(CommandType.Attack).PerformAction(actorUnit, targetUnit, willHitTarget);
+
+        public override void Undo()
         {
             if (willHitTarget)
             {
                 if (!targetUnit.IsAlive())
-                {
                     targetUnit.Revive();
-                }
+
                 targetUnit.RestoreHealth(actorUnit.CurrentPower);
                 actorUnit.Owner.ResetCurrentActiveUnit();
-
-                actionSelectionUIController.Show(actorUnit.GetCommandsList());
-
             }
         }
 

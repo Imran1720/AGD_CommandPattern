@@ -4,6 +4,7 @@ using Command.Commands;
 using Command.Events;
 using Command.Input;
 using Command.Player;
+using Command.Replay;
 using Command.Sound;
 using Command.UI;
 using Command.Utilities;
@@ -48,15 +49,16 @@ namespace Command.Main
             SoundService = new SoundService(soundScriptableObject, sfxSource, bgMusicSource);
             EventService = new EventService();
             ActionService = new ActionService();
+            InputService = new InputService();
+            CommandInvoker = new CommandInvoker();
             BattleService = new BattleService(battleScriptableObjects);
             PlayerService = new PlayerService();
             uiService.Init(battleScriptableObjects.Count);
-            InputService = new InputService(uiService.GetActionSelectionUIController());
-            CommandInvoker = new CommandInvoker();
             ReplayService = new ReplayService();
         }
 
-        public void PerformAction(ICommand commandToExceute) => PlayerService.ProcessUnitCommand(commandToExceute as UnitCommand);
         private void Update() => InputService.UpdateInputService();
+
+        public void ProcessUnitCommand(ICommand commandToProcess) => PlayerService.ProcessUnitCommand(commandToProcess as UnitCommand);
     }
 }

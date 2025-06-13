@@ -8,27 +8,26 @@ namespace Command.Commands
     public class AttackStanceCommand : UnitCommand
     {
         private bool willHitTarget;
-        ActionSelectionUIController actionSelectionUIController;
 
-        public AttackStanceCommand(CommandData data, ActionSelectionUIController actionSelectionUIController)
+        public AttackStanceCommand(CommandData commandData)
         {
-            this.commandData = data;
+            this.commandData = commandData;
             willHitTarget = WillHitTarget();
-            this.actionSelectionUIController = actionSelectionUIController;
         }
+
         public override void Execute() => GameService.Instance.ActionService.GetActionByType(CommandType.AttackStance).PerformAction(actorUnit, targetUnit, willHitTarget);
 
-        public override void undo()
+        public override void Undo()
         {
             if (willHitTarget)
             {
-                targetUnit.CurrentPower -= (int)(targetUnit.CurrentPower * .2f);
+                targetUnit.CurrentPower -= (int)(targetUnit.CurrentPower * 0.2f);
                 actorUnit.Owner.ResetCurrentActiveUnit();
             }
-            actionSelectionUIController.Show(actorUnit.GetCommandsList());
         }
 
         public override bool WillHitTarget() => true;
+
     }
 
 }

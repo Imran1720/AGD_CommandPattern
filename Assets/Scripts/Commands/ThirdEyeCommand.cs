@@ -1,6 +1,4 @@
-using Command.Actions;
 using Command.Main;
-using Command.UI;
 
 namespace Command.Commands
 {
@@ -8,20 +6,20 @@ namespace Command.Commands
     {
         private bool willHitTarget;
         private int previousHealth;
-        ActionSelectionUIController actionSelectionUIController;
-        public ThirdEyeCommand(CommandData commandData, ActionSelectionUIController actionSelectionUIController)
+
+        public ThirdEyeCommand(CommandData commandData)
         {
             this.commandData = commandData;
             willHitTarget = WillHitTarget();
-            this.actionSelectionUIController = actionSelectionUIController;
         }
+
         public override void Execute()
         {
             previousHealth = targetUnit.CurrentHealth;
-            GameService.Instance.ActionService.GetActionByType(CommandType.ThirdEye).PerformAction(actorUnit, targetUnit, willHitTarget);
+            GameService.Instance.ActionService.GetActionByType(Actions.CommandType.ThirdEye).PerformAction(actorUnit, targetUnit, willHitTarget);
         }
 
-        public override void undo()
+        public override void Undo()
         {
             if (!targetUnit.IsAlive())
                 targetUnit.Revive();
@@ -30,11 +28,8 @@ namespace Command.Commands
             targetUnit.RestoreHealth(healthToRestore);
             targetUnit.CurrentPower -= healthToRestore;
             actorUnit.Owner.ResetCurrentActiveUnit();
-            actionSelectionUIController.Show(actorUnit.GetCommandsList());
-
         }
 
         public override bool WillHitTarget() => true;
     }
-
 }

@@ -8,45 +8,37 @@ namespace Command.Commands
 
     public class CommandInvoker
     {
-        private Stack<ICommand> commandRegister = new Stack<ICommand>();
+        private Stack<ICommand> commandRegistry = new Stack<ICommand>();
 
         public CommandInvoker() => SubscribeToEvents();
 
         private void SubscribeToEvents() => GameService.Instance.EventService.OnReplayButtonSelected.AddListener(SetReplayStack);
 
-
-
         public void ProcessCommand(ICommand commandToProcess)
         {
             ExecuteCommand(commandToProcess);
-            RegiterCommand(commandToProcess);
+            RegisterCommand(commandToProcess);
         }
 
         public void ExecuteCommand(ICommand commandToExecute) => commandToExecute.Execute();
 
-        public void RegiterCommand(ICommand commandToRegiter) => commandRegister.Push(commandToRegiter);
+        public void RegisterCommand(ICommand commandToRegister) => commandRegistry.Push(commandToRegister);
 
         public void Undo()
         {
             if (!RegistryEmpty() && CommandBelongsToActivePlayer())
-            {
-                ICommand command = commandRegister.Pop();
-                command.undo();
-            }
+                commandRegistry.Pop().Undo();
         }
 
         public void SetReplayStack()
         {
-            GameService.Instance.ReplayService.SetCommandStack(commandRegister);
-            commandRegister.Clear();
+            GameService.Instance.ReplayService.SetCommandStack(commandRegistry);
+            commandRegistry.Clear();
         }
 
-        private bool RegistryEmpty() => commandRegister.Count == 0;
+        private bool RegistryEmpty() => commandRegistry.Count == 0;
 
-        private bool CommandBelongsToActivePlayer()
-        {
-            return (commandRegister.Peek() as UnitCommand).commandData.ActorPlayerID == GameService.Instance.PlayerService.ActivePlayerID;
-        }
+        private bool CommandBelongsToActivePlayer() => (commandRegistry.Peek() as UnitCommand).commandData.ActorPlayerID == GameService.Instance.PlayerService.ActivePlayerID;
     }
-
 }
+

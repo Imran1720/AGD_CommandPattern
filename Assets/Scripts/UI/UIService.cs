@@ -45,7 +45,7 @@ namespace Command.UI
 
         private void SubscribeToEvents()
         {
-            GameService.Instance.EventService.OnReplayButtonSelected.AddListener(OnReplayButtonPressed);
+            GameService.Instance.EventService.OnReplayButtonSelected.AddListener(HideBattleEndUI);
         }
 
         private void ShowBattleSelectionView(int battleCount) => battleSelectionController.Show(battleCount);
@@ -64,10 +64,10 @@ namespace Command.UI
         {
             switch (GameService.Instance.ReplayService.ReplayState)
             {
-                case ReplayState.ACTIVE:
-                    //   GameService.Instance.StartCoroutine(GameService.Instance.ReplayService.ExecuteNext());
+                case Replay.ReplayState.ACTIVE:
+                    GameService.Instance.StartCoroutine(GameService.Instance.ReplayService.ExecuteNext());
                     break;
-                case ReplayState.DEACTIVE:
+                case Replay.ReplayState.DEACTIVE:
                     actionSelectionController.Show(executableActions);
                     GameService.Instance.InputService.SetInputState(InputState.SELECTING_ACTION);
                     break;
@@ -88,10 +88,6 @@ namespace Command.UI
 
         public void SetBattleBackgroundImage(Sprite bgSprite) => gameplayController.SetBattleBackgroundImage(bgSprite);
 
-        public void OnReplayButtonPressed()
-        {
-            HideBattleEndUI();
-            StartCoroutine(GameService.Instance.ReplayService.ExecuteNext());
-        }
+
     }
 }
