@@ -1,6 +1,6 @@
+using Command.Main;
 using System.Collections.Generic;
 using UnityEngine;
-using Command.Main;
 using UnityEngine.UI;
 
 namespace Command.Battle
@@ -16,7 +16,14 @@ namespace Command.Battle
             SubscribeToEvents();
         }
 
-        private void SubscribeToEvents() => GameService.Instance.EventService.OnBattleSelected.AddListener(LoadBattle);
+        private void SubscribeToEvents()
+        {
+            GameService.Instance.EventService.OnBattleSelected.AddListener(LoadBattle);
+            GameService.Instance.EventService.OnReplayButtonSelected.AddListener(LoadReplay);
+
+        }
+
+        private void LoadReplay() => LoadBattle(currentBattleId);
 
         private void LoadBattle(int battleId)
         {

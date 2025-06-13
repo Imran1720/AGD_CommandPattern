@@ -1,6 +1,7 @@
 using Command.Actions;
 using Command.Input;
 using Command.Main;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -36,7 +37,16 @@ namespace Command.UI
 
         public ActionSelectionUIController GetActionSelectionUIController() => actionSelectionController;
 
-        public void Init(int battleCount) => ShowBattleSelectionView(battleCount);
+        public void Init(int battleCount)
+        {
+            ShowBattleSelectionView(battleCount);
+            SubscribeToEvents();
+        }
+
+        private void SubscribeToEvents()
+        {
+            GameService.Instance.EventService.OnReplayButtonSelected.AddListener(OnReplayButtonPressed);
+        }
 
         private void ShowBattleSelectionView(int battleCount) => battleSelectionController.Show(battleCount);
 
@@ -52,8 +62,16 @@ namespace Command.UI
 
         public void ShowActionSelectionView(List<CommandType> executableActions)
         {
-            actionSelectionController.Show(executableActions);
-            GameService.Instance.InputService.SetInputState(InputState.SELECTING_ACTION);
+            switch (GameService.Instance.ReplayService.ReplayState)
+            {
+                case ReplayState.ACTIVE:
+                    //   GameService.Instance.StartCoroutine(GameService.Instance.ReplayService.ExecuteNext());
+                    break;
+                case ReplayState.DEACTIVE:
+                    actionSelectionController.Show(executableActions);
+                    GameService.Instance.InputService.SetInputState(InputState.SELECTING_ACTION);
+                    break;
+            }
         }
 
         public void ShowBattleEndUI(int winnerId)
@@ -69,5 +87,11 @@ namespace Command.UI
         public void ActionMissed() => gameplayController.ShowMissedAction();
 
         public void SetBattleBackgroundImage(Sprite bgSprite) => gameplayController.SetBattleBackgroundImage(bgSprite);
+
+        public void OnReplayButtonPressed()
+        {
+            HideBattleEndUI();
+            StartCoroutine(GameService.Instance.ReplayService.ExecuteNext());
+        }
     }
 }
