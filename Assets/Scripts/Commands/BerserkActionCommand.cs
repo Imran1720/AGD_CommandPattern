@@ -10,7 +10,7 @@ namespace Command.Commands
             willHitTarget = WillHitTarget();
         }
 
-        public override void Execute() => GameService.Instance.ActionService.GetActionByType(Actions.CommandType.Heal).PerformAction(actorUnit, targetUnit, willHitTarget);
+        public override void Execute() => GameService.Instance.ActionService.GetActionByType(Actions.CommandType.BerserkAttack).PerformAction(actorUnit, targetUnit, willHitTarget);
 
         public override bool WillHitTarget() => true;
     }
