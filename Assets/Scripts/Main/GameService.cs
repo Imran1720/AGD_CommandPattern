@@ -30,6 +30,7 @@ namespace Command.Main
         public BattleService BattleService { get; private set; }
         public PlayerService PlayerService { get; private set; }
         public CommandInvoker CommandInvoker { get; private set; }
+        public ReplayService ReplayService { get; private set; }
 
         [SerializeField] private UIService uiService;
         public UIService UIService => uiService;
@@ -52,6 +53,7 @@ namespace Command.Main
             uiService.Init(battleScriptableObjects.Count);
             InputService = new InputService(uiService.GetActionSelectionUIController());
             CommandInvoker = new CommandInvoker();
+            ReplayService = new ReplayService();
         }
 
         public void PerformAction(ICommand commandToExceute) => PlayerService.ProcessUnitCommand(commandToExceute as UnitCommand);
