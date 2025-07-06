@@ -1,6 +1,6 @@
-# 🎯 Command Tactics – Turn-Based Strategy with Undo & Replay (Command Pattern)
+# 🎯 Turn-Based Strategy with Undo & Replay (Command Pattern)
 
-**Command Tactics** is a guided project built as part of Outscal’s Design Patterns module.  
+This is a guided project built as part of Outscal’s Design Patterns module.  
 This game is a **turn-based strategy prototype** where each unit can **move, attack, undo actions, and even replay the entire match** from scratch — all powered by the **Command Pattern**.
 
 ---
