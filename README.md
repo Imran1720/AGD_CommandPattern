@@ -5,6 +5,13 @@ This game is a **turn-based strategy prototype** where each unit can **move, att
 
 ---
 
+## Gameplay
+
+Click on following image to view gameplay.
+[![Image](https://github.com/user-attachments/assets/1e53f41a-8e66-4d98-ac9d-6d2c6b6581f3)](https://drive.google.com/file/d/1LWYf8-XPiNi9zmKgfcmK5YVhXuYcvyl8/view?usp=sharing)
+
+---
+
 ## 🧠 What I Learned
 
 - ✅ Practical implementation of the **Command Pattern** in a game setting.
