@@ -52,9 +52,7 @@ Click on following image to view gameplay.
 
 ---
 
-## 💡 How It Works
-
-### 🔑 Command Pattern Flow
+## 🔑 Command Pattern Flow
 
 1. **Client**: Issues a command (e.g., move or attack).
 2. **Command Invoker**: Executes the command and stores it in history.
