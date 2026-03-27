@@ -1,8 +1,9 @@
+using Command.Actions;
+using Command.Input;
+using Command.Main;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
-using Command.Main;
-using Command.Input;
-using Command.Actions;
 
 namespace Command.UI
 {
@@ -34,7 +35,18 @@ namespace Command.UI
             battleEndController = new BattleEndUIController(battleEndView);
         }
 
-        public void Init(int battleCount) => ShowBattleSelectionView(battleCount);
+        public ActionSelectionUIController GetActionSelectionUIController() => actionSelectionController;
+
+        public void Init(int battleCount)
+        {
+            ShowBattleSelectionView(battleCount);
+            SubscribeToEvents();
+        }
+
+        private void SubscribeToEvents()
+        {
+            GameService.Instance.EventService.OnReplayButtonSelected.AddListener(HideBattleEndUI);
+        }
 
         private void ShowBattleSelectionView(int battleCount) => battleSelectionController.Show(battleCount);
 
@@ -48,10 +60,18 @@ namespace Command.UI
 
         public void SetActionContainerAlignment(int activePlayerID) => actionSelectionController.SetActionContainerAlignment(activePlayerID);
 
-        public void ShowActionSelectionView(List<ActionType> executableActions)
+        public void ShowActionSelectionView(List<CommandType> executableActions)
         {
-            actionSelectionController.Show(executableActions);
-            GameService.Instance.InputService.SetInputState(InputState.SELECTING_ACTION);
+            switch (GameService.Instance.ReplayService.ReplayState)
+            {
+                case Replay.ReplayState.ACTIVE:
+                    GameService.Instance.StartCoroutine(GameService.Instance.ReplayService.ExecuteNext());
+                    break;
+                case Replay.ReplayState.DEACTIVE:
+                    actionSelectionController.Show(executableActions);
+                    GameService.Instance.InputService.SetInputState(InputState.SELECTING_ACTION);
+                    break;
+            }
         }
 
         public void ShowBattleEndUI(int winnerId)
@@ -67,5 +87,7 @@ namespace Command.UI
         public void ActionMissed() => gameplayController.ShowMissedAction();
 
         public void SetBattleBackgroundImage(Sprite bgSprite) => gameplayController.SetBattleBackgroundImage(bgSprite);
+
+
     }
 }
